@@ -3,6 +3,9 @@
 ## The script is exporting all Disabled Users from the  ##
 ## Active Directory, without the Service accounts       ##
 ## Please dont make any changes if you don't know what  ##
+## to change                                            ##
+##                                                      ##
+## Thanks, Saggie                                       ##
 ##                                                      ##
 ##########################################################
 Import-Module ActiveDirectory
