@@ -1,4 +1,4 @@
 # Powershell
-My Powershell scripts
+This is my Private powershell github repository.
 
-testins
+feel free to contact me at contact@saggiehaim.net
