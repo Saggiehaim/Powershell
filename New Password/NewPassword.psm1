@@ -10,6 +10,9 @@ Function New-Password()
    
  .PARAMETER NumberofPasswords 
      Specifies Number of passwored to generate. Default is 1 random password. 
+
+ .PARAMETER AsSecureString
+     Return passwords as secure strings.
  
  .PARAMETER Length 
      Specifies the passwored length. Defualt is 12 chars 
@@ -42,6 +45,10 @@ Function New-Password()
             F7STnb
             DD34@O
             9drhe4
+    
+    .EXAMPLE
+            New-Password -NumberofPasswords 1 -Length 10 -AsSecureString
+            System.Security.SecureString
 
  .NOTES 
   Author: Saggie Haim 
