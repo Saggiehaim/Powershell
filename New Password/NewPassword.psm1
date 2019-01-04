@@ -55,7 +55,11 @@ Function New-Password()
 
      [parameter(Position=1,
      Mandatory=$false)]
-     [string]$Length = 12
+     [string]$Length = 12,
+
+     [Parameter(Position=1,
+     Mandatory=$false)]
+     [switch]$AsSecureString = $false
     )
     $passwords = @()
     $inputRange = 48..122
@@ -73,6 +77,11 @@ Function New-Password()
         }
         $passwords += $pass
         
+     }
+     if ($AsSecureString -eq $true)
+     {
+         $passwords = $passwords | ConvertTo-SecureString -AsPlainText -Force
+         return $passwords
      }
      Return $Passwords
     }
