@@ -48,6 +48,7 @@ Function New-Password()
     
     .EXAMPLE
             New-Password -NumberofPasswords 1 -Length 10 -AsSecureString
+            WARNING: Converting the Password 3@jedeVcjoBf to secure string, this is the last time you will see it.
             System.Security.SecureString
 
  .NOTES 
@@ -87,7 +88,7 @@ Function New-Password()
      }
      if ($AsSecureString -eq $true)
      {
-         $passwords = $passwords | ConvertTo-SecureString -AsPlainText -Force
+         $passwords = $passwords |  ForEach-Object {Write-Warning "Converting the Password $_ to secure string, this is the last time you will see it."; ConvertTo-SecureString -String $_ -AsPlainText -Force}
          return $passwords
      }
      Return $Passwords
