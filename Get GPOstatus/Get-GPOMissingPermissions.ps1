@@ -31,13 +31,13 @@ function Get-GPOMissingPermissions {
                 $GPOPermissionForAuthUsers = Get-GPPermission -Guid $GPO.Id -All | Select-Object -ExpandProperty Trustee | Where-Object {$_.Name -eq "Authenticated Users"}
                 $GPOPermissionForDomainComputers = Get-GPPermission -Guid $GPO.Id -All | Select-Object -ExpandProperty Trustee | Where-Object {$_.Name -eq "Domain Computers"}
                 If (!$GPOPermissionForAuthUsers -and !$GPOPermissionForDomainComputers) {
-                    $MissingPermissionsGPOArray += $GPo.DisplayName
+                    $MissingPermissionsGPOArray += $gpo
                 }
             }
         }
         if (($MissingPermissionsGPOArray).Count -ne 0) {
             Write-Host "The following GPO's do not grant any permissions to the 'Authenticated Users' Or 'Domain Computers' Group"
-            return $MissingPermissionsGPOArray
+            return $MissingPermissionsGPOArray | Select-Object DisplayName
         }
         else {
             return [string]"No GPO's with missing permissions to the 'Authenticated Users' or 'Domain Computers' groups found "

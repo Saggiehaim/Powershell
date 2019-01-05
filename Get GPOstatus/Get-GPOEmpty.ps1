@@ -28,11 +28,12 @@ function Get-GPOEmpty {
             Write-Verbose -Message "Checking '$($gpo.DisplayName)' link"
             [xml]$GPOXMLReport = $gpo | Get-GPOReport -ReportType xml
             if ($null -eq $GPOXMLReport.gpo.User.ExtensionData -and $null -eq $GPOXMLReport.gpo.Computer.ExtensionData) {
-                $EmptyGPO += Write-Warning "'$($gpo.DisplayName)' is empty"
+                $EmptyGPO += $gpo
             }
         }
         if (($EmptyGPO).Count -ne 0) {
-            return $EmptyGPO
+            Write-Host "The Following GPO's are empty:"
+            return $EmptyGPO | Select-Object DisplayName
         }
         else {
             return "No Empty GPO's Found"

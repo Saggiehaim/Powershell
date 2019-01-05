@@ -28,7 +28,7 @@ function Get-GPOUnlinked {
             Write-Verbose -Message "Checking '$($gpo.DisplayName)' link"
             [xml]$GPOXMLReport = $gpo | Get-GPOReport -ReportType xml
             if ($null -eq $GPOXMLReport.GPO.LinksTo) { 
-                $UnlinkedGPO += Write-Warning "'$($gpo.DisplayName)' is not linked"
+                $UnlinkedGPO += $gpo
             }
         }
         if (($UnlinkedGPO).Count -ne 0) {
