@@ -5,7 +5,7 @@ function Get-GPOstatus () {
             Mandatory = $false)]
         [switch]$Delete = $false
     )
-    $MarkedGPOs = New-Object System.Collections.ArrayList
+    ## $MarkedGPOs = New-Object System.Collections.ArrayList
     try {
         Write-Verbose -Message "Importing GroupPolicy module"
         Import-Module GroupPolicy -ErrorAction Stop
@@ -33,8 +33,8 @@ function Get-GPOstatus () {
             Write-Warning "'$($gpo.DisplayName)' is empty"
         }
         If ($GPO.User.Enabled) {
-            $GPOPermissionForAuthUsers = Get-GPPermission -Guid $GPO.Id -All | select -ExpandProperty Trustee | ? {$_.Name -eq "Authenticated Users"}
-            $GPOPermissionForDomainComputers = Get-GPPermission -Guid $GPO.Id -All | select -ExpandProperty Trustee | ? {$_.Name -eq "Domain Computers"}
+            $GPOPermissionForAuthUsers = Get-GPPermission -Guid $GPO.Id -All | Select-Object -ExpandProperty Trustee | Where-Object {$_.Name -eq "Authenticated Users"}
+            $GPOPermissionForDomainComputers = Get-GPPermission -Guid $GPO.Id -All | Select-Object -ExpandProperty Trustee | Where-Object {$_.Name -eq "Domain Computers"}
             If (!$GPOPermissionForAuthUsers -and !$GPOPermissionForDomainComputers) {
                 Write-Warning "'$($GPo.DisplayName)' do not grant any permissions to the 'Authenticated Users' or 'Domain Computers' groups"
             }
