@@ -6,13 +6,26 @@ function get-GPOUnlinked () {
             [switch]$Delete = $false
         )
      $unlinkedGPO = @()
-     import-module GroupPolicy
-     Write-Verbose -Message "Importing GroupPolicy module"  
-     $GPOs = Get-GPO -All  
-     Write-Verbose -Message "Found " + $GPOs.Count + " to check"
+     try {
+        Write-Verbose -Message "Importing GroupPolicy module"
+        Import-Module GroupPolicy -ErrorAction Stop
+     }
+     catch {
+        Write-Error -Message "GroupPolicy Module not found. Make sure RSAT (Remote Server Admin Tools) is installed"
+        exit
+     }
+     try {
+        Write-Verbose -Message "Importing GroupPolicy Policies"  
+        $GPOs = Get-GPO -All  
+        Write-Verbose -Message "Found $GPOs.Count policies to check"
+     }
+     catch {
+        Write-Error -Message "Can't Load GPO's Please make sure you have connection to Domain Controllers"
+        exit
+     }
      ForEach($gpo  in $GPOs)
      { 
-         Write-Verbose -Message "Checking " + $gpo.name + " link"
+         Write-Verbose -Message "Checking $gpo.name link"
          [xml]$GPOXMLReport = $gpo | Get-GPOReport -ReportType xml 
          if ($GPOXMLReport.GPO.LinksTo -eq $null)
          { 
