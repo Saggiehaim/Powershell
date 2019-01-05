@@ -1,11 +1,11 @@
-function get-GPOUnlinked () {
+function Get-GPOstatus () {
     [cmdletbinding()]
     param (
         [parameter(Position = 0,
             Mandatory = $false)]
         [switch]$Delete = $false
     )
-    $unlinkedGPO = @()
+    $MarkedGPOs = New-Object System.Collections.ArrayList
     try {
         Write-Verbose -Message "Importing GroupPolicy module"
         Import-Module GroupPolicy -ErrorAction Stop
