@@ -35,7 +35,12 @@ function Get-GPOMissingPermissions {
                 }
             }
         }
-        return $MissingPermissionsGPOArray
+        if (($MissingPermissionsGPOArray).Count -ne 0) {
+            return $MissingPermissionsGPOArray
+        }
+        else {
+            return Write-Host "No GPO's with missing permissions to the 'Authenticated Users' or 'Domain Computers' groups found "
+        }
     }
     else {
         Write-Verbose -Message "Checking '$($gpo.DisplayName)' link"
@@ -45,6 +50,9 @@ function Get-GPOMissingPermissions {
             $GPOPermissionForDomainComputers = Get-GPPermission -Guid $GPO.Id -All | Select-Object -ExpandProperty Trustee | Where-Object {$_.Name -eq "Domain Computers"}
             If (!$GPOPermissionForAuthUsers -and !$GPOPermissionForDomainComputers) {
                 return Write-Warning "'$($GPo.DisplayName)' do not grant any permissions to the 'Authenticated Users' or 'Domain Computers' groups"
+            }
+            else {
+                return "'$($GPo.DisplayName)' grant permissions to the 'Authenticated Users' or 'Domain Computers' groups"
             }
         }
     }

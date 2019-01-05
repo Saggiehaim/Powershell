@@ -31,13 +31,22 @@ function Get-GPOEmpty {
                 $EmptyGPO += Write-Warning "'$($gpo.DisplayName)' is empty"
             }
         }
-        return $EmptyGPO
+        if (($EmptyGPO).Count -ne 0) {
+            return $EmptyGPO
+        }
+        else {
+            return "No Empty GPO's Found"
+        }
+        
     }
     else {
         Write-Verbose -Message "Checking '$($gpo.DisplayName)' link"
         [xml]$GPOXMLReport = $gpo | Get-GPOReport -ReportType xml
         if ($null -eq $GPOXMLReport.gpo.User.ExtensionData -and $null -eq $GPOXMLReport.gpo.Computer.ExtensionData) {
             return Write-Warning "'$($gpo.DisplayName)' is empty"
+        }
+        else {
+            return Write-Host "'$($gpo.DisplayName)' is no empty"
         }
     }
 }

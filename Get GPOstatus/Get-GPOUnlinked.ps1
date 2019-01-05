@@ -31,13 +31,21 @@ function Get-GPOUnlinked {
                 $UnlinkedGPO += Write-Warning "'$($gpo.DisplayName)' is not linked"
             }
         }
-        return $UnlinkedGPO
+        if (($UnlinkedGPO).Count -ne 0) {
+            return $UnlinkedGPO
+        }
+        else {
+            return Write-Host "No Unlinked GPO found"
+        }
     }
     else {
         Write-Verbose -Message "Checking '$($gpo.DisplayName)' link"
         [xml]$GPOXMLReport = $gpo | Get-GPOReport -ReportType xml
         if ($null -eq $GPOXMLReport.GPO.LinksTo) { 
             return Write-Warning "'$($gpo.DisplayName)' is not linked" 
+        }
+        else {
+            return Write-Host "'$($gpo.DisplayName)' is linked"
         }
     }
 }
