@@ -2,7 +2,7 @@ function Get-GPOMissingPermissions {
     [cmdletbinding()]
     param (
         [parameter(Position = 0,
-            Mandatory = $false)]
+            Mandatory = $false, ValueFromPipeline)]
         [Microsoft.GroupPolicy.Gpo]$GPO = $null
     )
     try {

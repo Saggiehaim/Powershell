@@ -2,7 +2,7 @@ function Get-GPODisabled {
     [cmdletbinding()]
     param (
         [parameter(Position = 0,
-            Mandatory = $false)]
+            Mandatory = $false, ValueFromPipeline)]
         [Microsoft.GroupPolicy.Gpo]$GPO = $null
     )
     try {
@@ -29,7 +29,7 @@ function Get-GPODisabled {
             switch ($gpo.GpoStatus) {
                 ComputerSettingsDisabled {$DisabledGPO += "in '$($gpo.DisplayName)' the Computer Settings Disabled"}
                 UserSettingsDisabled {$DisabledGPO += "in '$($gpo.DisplayName)' the User Settings Disabled"}
-                AllSettingsDisabled {$DisabledGPO += "in '$($gpo.DisplayName)' the All Settings Disabled"}
+                AllSettingsDisabled {$DisabledGPO += "in '$($gpo.DisplayName)' All Settings Disabled"}
             }
         }
         if (($DisabledGPO).Count -ne 0) {
@@ -46,7 +46,7 @@ function Get-GPODisabled {
         switch ($gpo.GpoStatus) {
             ComputerSettingsDisabled {return "in '$($gpo.DisplayName)' the Computer Settings Disabled"}
             UserSettingsDisabled {return "in '$($gpo.DisplayName)' the User Settings Disabled"}
-            AllSettingsDisabled {return "in '$($gpo.DisplayName)' the All Settings Disabled"}
+            AllSettingsDisabled {return "in '$($gpo.DisplayName)' All Settings Disabled"}
         }
         else {
             return Write-Host "in '$($gpo.DisplayName)' all settings enabled"
