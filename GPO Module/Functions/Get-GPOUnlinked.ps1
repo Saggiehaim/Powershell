@@ -28,7 +28,7 @@ function Get-GPOUnlinked {
             Write-Verbose -Message "Checking '$($gpo.DisplayName)' link"
             [xml]$GPOXMLReport = $gpo | Get-GPOReport -ReportType xml
             if ($null -eq $GPOXMLReport.GPO.LinksTo) { 
-                if (!((Get-ADObject -LDAPFilter '(objectClass=site)' -SearchBase "CN=Sites,$((Get-ADRootDSE).configurationNamingContext)" -SearchScope OneLevel -Properties gPLink).gPlink  | where {$_ -like "*$($gpo.id)*"})) {
+                if (!((Get-ADObject -LDAPFilter '(objectClass=site)' -SearchBase "CN=Sites,$((Get-ADRootDSE).configurationNamingContext)" -SearchScope OneLevel -Properties gPLink).gPlink  | Where-Object {$_ -like "*$($gpo.id)*"})) {
                     $UnlinkedGPO += $gpo
                 }
             }
@@ -45,7 +45,7 @@ function Get-GPOUnlinked {
         [xml]$GPOXMLReport = $gpo | Get-GPOReport -ReportType xml
         if ($null -eq $GPOXMLReport.GPO.LinksTo) { 
             if ($null -eq $GPOXMLReport.GPO.LinksTo) { 
-                if (!((Get-ADObject -LDAPFilter '(objectClass=site)' -SearchBase "CN=Sites,$((Get-ADRootDSE).configurationNamingContext)" -SearchScope OneLevel -Properties gPLink).gPlink  | where {$_ -like "*$($gpo.id)*"})) {
+                if (!((Get-ADObject -LDAPFilter '(objectClass=site)' -SearchBase "CN=Sites,$((Get-ADRootDSE).configurationNamingContext)" -SearchScope OneLevel -Properties gPLink).gPlink  | Where-Object {$_ -like "*$($gpo.id)*"})) {
                     return Write-Warning "'$($gpo.DisplayName)' is not linked" 
                 }
                 else {
