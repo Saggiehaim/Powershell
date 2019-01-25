@@ -1,6 +1,6 @@
 # Check if User is valid in Active Directory
 function Get-account ($EmployeeID) {
-    $user = Get-ADUser -filter * -Properties EmployeeID, EmailAddress | Where-Object {$_.EmployeeID -eq $EmployeeID} | Select-Object Name, EmailAddress, EmployeeID
+    $user = Get-ADUser -Properties EmployeeID, EmailAddress -Filter {EmployeeID -eq $EmployeeID} | Select-Object Name, EmailAddress, EmployeeID
     if ($null -eq $user) {
         return $false
     }
@@ -24,7 +24,8 @@ function new-Password() {
 }
 #Create the Service Account
 function new-ADServiceAccount ($SAName, $Description, $Creatoruser, $Manageruser) {
-    $path = 'OU=Global Service Accounts,OU=Lumenis,DC=corp,DC=lumenis,DC=com'
+    # OU to create the Service Account
+    $path = 'OU=Global Service Accounts,DC=SaggieHaim,DC=Net'
     $password = new-Password
     $ManagedBy = 'Managed By ' + $Manageruser.Name + ' (' + $Manageruser.EmployeeID + ')' 
     try {
@@ -42,10 +43,10 @@ function new-ADServiceAccount ($SAName, $Description, $Creatoruser, $Manageruser
 ## Send Mail on Complition
 function Send-DoneEmail ($Creatoruser, $Manageruser, $NewUser, $password) {
     ##configure SMTP Settings
-    $From = "ServIT@Lumenis.com"
-    $SMTPServer = "10.10.0.145"
+    $From = "contact@saggiehaim.net"
+    $SMTPServer = "saggiehaim.net"
     $SMTPPort = "25"
-    $AdministratorsSMTPAddress = "Saggie.haim@Lumenis.com"
+    $AdministratorsSMTPAddress = "Contact@saggiehaim.net"
     $usersSMTPAddress = $Manageruser.EmailAddress, $Creatoruser.EmailAddress
 
     #Create email and send it to Users.
@@ -92,7 +93,6 @@ $Form = New-Object system.Windows.Forms.Form
 $Form.ClientSize = '495,216'
 $Form.text = "Service Account Creator"
 $Form.TopMost = $false
-$Form.icon = "C:\Users\saggie.haim\desktop\admin.ico"
 $Form.StartPosition = "CenterScreen" #loads the window in the center of the screen
 $Form.FormBorderStyle = 'Fixed3D' #modifies the window border
 
