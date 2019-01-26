@@ -178,7 +178,6 @@ $Form.controls.AddRange(@($SAccountName, $AccountName, $ManagerEmployee, $Manage
 
 #region gui events {
 $Create.Add_Click( {
-        $StatusBar.Text = 'Running.. Please Wait'
         if ($SAccountName.Text -eq $null -or $SAccountName.Text -eq '' -or $SAccountName.Text -eq "Srvc") {
             $StatusBar.ForeColor = "#ff0000"
             $StatusBar.Text = "Please Make sure you set Service Account name"
@@ -210,7 +209,6 @@ $Create.Add_Click( {
             $StatusBar.Text = "Please Enter Creator Employee ID"
             return
         }
-        $StatusBar.Text = "Running.. Checking users"
         $Creator = Get-account $CreatorEmployeeID.text
         $Manager = Get-account $ManagerEmployeeID.text
         if ($Creator -eq $false) {
@@ -223,7 +221,6 @@ $Create.Add_Click( {
             $StatusBar.Text = "Please Validate Manager Employee ID"
             return
         }
-        $StatusBar.Text = "Running..  Creating the account"
         $run = new-ADServiceAccount $SAccountName.text $TDescription.text $Creator $Manager
         if ($run -eq $false) {
             $StatusBar.ForeColor = "#ff0000"
