@@ -1,15 +1,15 @@
 function Set-NicMAC {
     [cmdletbinding()]
     param (
-    [parameter(Position=0,
+    [parameter(,
     Mandatory=$false, ValueFromPipeline)]
     [Microsoft.Management.Infrastructure.CimInstance]$nic = $null,
 
-     [parameter(Position=1,
+     [parameter(
      Mandatory=$false)]
      [string]$Mac = $false ,
 
-     [Parameter(Position=1,
+     [Parameter(
      Mandatory=$false)]
      [string]$Name = $false
     )
@@ -27,13 +27,11 @@ function Set-NicMAC {
     if ($null -ne $nic)
     {
         Write-Host "Setting the $($nic.name) mac address to $mac"
-        Set-NetAdapter -Name $nic.name -MacAddress $Mac
+        Set-NetAdapter -Name $($nic.name) -MacAddress $Mac
     }
-    if ($nicName -ne $false)
+    if ($Name -ne $false)
     {
         Write-Host "Setting the $Name mac address to $mac"
         Set-NetAdapter -Name $Name -MacAddress $Mac
     }
 }
-
-Get-NetAdapter -name "Wi-Fi" | Set-NicMAC
