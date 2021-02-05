@@ -54,7 +54,7 @@ function Remove-AzLACustomFieldName {
    $contentType = "application/json"
    $uri = "https://management.azure.com/subscriptions/$($subscriptionId)/resourceGroups/$($resourceGroupName)/providers/Microsoft.OperationalInsights/workspaces/$($workspaceName)/customfields/$($tableName)!$($customFieldsName)?api-version=2020-08-01"
    
-   write-verbose "[$(Get-Date -Format 'dd/MM/yy hh:mm')] - Pushing $($logs.count) new events to Log Analytics"
+   write-verbose "[$(Get-Date -Format 'dd/MM/yy hh:mm')] - Getting AccessToken"
    $AzContext = Get-AzContext
    $ArmToken = [Microsoft.Azure.Commands.Common.Authentication.AzureSession]::Instance.AuthenticationFactory.Authenticate(
        $AzContext.'Account',
@@ -65,9 +65,13 @@ function Remove-AzLACustomFieldName {
        $null,
        'https://management.azure.com/'
    )
+   
+   write-verbose "[$(Get-Date -Format 'dd/MM/yy hh:mm')] - Building headers"
    $headers = @{
        "Authorization" = 'Bearer  ' + $ArmToken.AccessToken;
    }
+   
+   write-verbose "[$(Get-Date -Format 'dd/MM/yy hh:mm')] - trying to delete $($customFieldsName) field from $($tableName) table"
    $response = Invoke-WebRequest -Uri $uri -Method $method -ContentType $contentType -Headers $headers
    if ($response.StatusCode -ge 200 -and $response.StatusCode -le 299) {
        write-verbose "[$(Get-Date -Format 'dd/MM/yy hh:mm')] - Accepted"
